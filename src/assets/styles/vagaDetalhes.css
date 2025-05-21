@@ -1,0 +1,343 @@
+/* Vaga detalhes specific styles */
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+/* Botões com espaçamento adequado */
+.btn {
+  margin-right: 20px;
+  padding: 8px 16px;
+}
+
+.btn-primary, .btn-secondary, .btn-outline {
+  border-radius: 8px;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.flex.gap-10 {
+  display: flex;
+  gap: 2rem !important;
+}
+
+/* Table styles */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  color: var(--text-color);
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-light);
+}
+
+tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Seções */
+.detalhes-section {
+  margin-bottom: 2rem;
+  background-color: #111;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.section-description {
+  margin-bottom: 1.5rem;
+  color: #bbb;
+  line-height: 1.5;
+}
+
+/* Etapas */
+.etapas-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.etapa-card {
+  background-color: #1a1a1a;
+  border-radius: 6px;
+  padding: 1.25rem;
+}
+
+.etapa-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #333;
+}
+
+.etapa-titulo {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.etapa-candidates-count {
+  font-size: 0.8125rem;
+  color: #888;
+  margin: 0.25rem 0 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.badge-secondary {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+/* Candidatos */
+.candidato-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.candidato-item:last-child {
+  border-bottom: none;
+}
+
+.candidato-nome {
+  font-weight: 600;
+  color: #e0e0e0;
+  margin-bottom: 0.25rem;
+}
+
+.candidato-email {
+  font-size: 0.875rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.candidato-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* Estatísticas */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.stat-card {
+  padding: 1rem;
+  background-color: #1a1a1a;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+/* Estados vazios */
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  background-color: #1a1a1a;
+  border-radius: 6px;
+}
+
+.empty-icon {
+  margin-bottom: 1rem;
+}
+
+.empty-svg {
+  width: 48px;
+  height: 48px;
+  stroke: #888;
+  margin: 0 auto;
+}
+
+.empty-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.5rem;
+}
+
+.empty-description {
+  font-size: 0.9375rem;
+  color: #888;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+/* Estados de vaga */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.badge-ativa {
+  background-color: rgba(37, 99, 235, 0.2);
+  color: #5c91f3;
+  border: 1px solid rgba(37, 99, 235, 0.3);
+}
+
+.badge-concluida {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge-congelada {
+  background-color: rgba(234, 179, 8, 0.2);
+  color: #fcd34d;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+/* Botões e ações */
+.btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #888;
+}
+
+.btn-link:hover {
+  text-decoration: none;
+}
+
+.btn-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-view {
+  color: #5c91f3;
+}
+
+.btn-view:hover {
+  color: #2563eb;
+}
+
+.btn-delete {
+  color: #ef4444;
+}
+
+.btn-delete:hover {
+  color: #dc2626;
+}
+
+.btn-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Alerts */
+.alert {
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.alert-error {
+  background-color: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.alert-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  .etapas-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .stats-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .etapas-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .stats-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+} 

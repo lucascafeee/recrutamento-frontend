@@ -14,22 +14,6 @@ Frontend para um sistema de Recrutamento e Seleção, desenvolvido com React, Ty
 - Axios (requisições HTTP)
 - CSS (sem uso de frameworks)
 
-## Estrutura de Pastas (Clean Architecture)
-
-```
-src/
-  ├── assets/         # Recursos estáticos (imagens, estilos)
-  │   └── styles/     # Arquivos CSS
-  ├── components/     # Componentes reutilizáveis
-  ├── contexts/       # Contextos e gerenciamento de estados
-  ├── hooks/          # Hooks customizados
-  ├── interfaces/     # Interfaces TypeScript
-  ├── pages/          # Componentes de páginas
-  ├── routes/         # Configurações de rota
-  ├── services/       # Serviços e comunicação com APIs
-  └── utils/          # Funções utilitárias
-```
-
 ## Funcionalidades
 
 - Autenticação (Login/Cadastro)
@@ -76,7 +60,3 @@ src/
 ## Backend
 
 Este frontend foi projetado para se comunicar com uma API em Go usando o framework Gin. O backend deverá fornecer endpoints para autenticação com JWT.
-
-## Licença
-
-MIT

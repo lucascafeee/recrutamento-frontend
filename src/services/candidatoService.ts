@@ -2,7 +2,6 @@ import api from './api';
 import type { Candidato } from '../interfaces/vaga';
 
 export const candidatoService = {
-  // Listar candidatos de uma vaga
   listarCandidatos: async (vagaId: string): Promise<Candidato[]> => {
     try {
       console.log(`Buscando candidatos da vaga ${vagaId}...`);
@@ -14,7 +13,6 @@ export const candidatoService = {
     }
   },
 
-  // Criar um novo candidato
   criarCandidato: async (candidato: Omit<Candidato, 'id'>): Promise<Candidato> => {
     try {
       console.log('Criando novo candidato:', candidato);
@@ -22,7 +20,6 @@ export const candidatoService = {
       return response.data;
     } catch (error) {
       console.error('Erro ao criar candidato:', error);
-      // Simulação de criação com mock
       return {
         id: Date.now().toString(),
         ...candidato
@@ -30,7 +27,6 @@ export const candidatoService = {
     }
   },
 
-  // Atualizar um candidato existente
   atualizarCandidato: async (id: string, candidato: Partial<Candidato>): Promise<Candidato> => {
     try {
       console.log(`Atualizando candidato ${id}:`, candidato);
@@ -42,19 +38,16 @@ export const candidatoService = {
     }
   },
 
-  // Excluir um candidato
   excluirCandidato: async (id: string): Promise<void> => {
     try {
       console.log(`Excluindo candidato ${id}...`);
       await api.delete(`/candidatos/${id}`);
     } catch (error) {
       console.error(`Erro ao excluir candidato ${id}:`, error);
-      // Simulação - não faz nada, apenas simula sucesso
       return;
     }
   },
 
-  // Mover candidato para outra etapa
   moverParaEtapa: async (candidatoId: string, etapaId: string): Promise<Candidato> => {
     try {
       console.log(`Movendo candidato ${candidatoId} para etapa ${etapaId}...`);
@@ -62,7 +55,6 @@ export const candidatoService = {
       return response.data;
     } catch (error) {
       console.error(`Erro ao mover candidato ${candidatoId} para etapa ${etapaId}:`, error);
-      // Simulação - retorna um candidato com etapa atualizada
       return {
         id: candidatoId,
         nome: 'Candidato Simulado',

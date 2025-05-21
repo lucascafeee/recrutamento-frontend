@@ -84,13 +84,11 @@ const mockData: { [key: string]: VagaCompleta } = {
 };
 
 export const vagaService = {
-  // Listar todas as vagas
   listarVagas: async (): Promise<Vaga[]> => {
     try {
       console.log('Buscando todas as vagas...');
       const response = await api.get('/vagas');
       
-      // Aplicar status locais nas vagas, se existirem
       let statusLocais: Record<string, VagaStatus> = {};
       try {
         statusLocais = JSON.parse(localStorage.getItem('vaga_status_local') || '{}');
@@ -98,7 +96,6 @@ export const vagaService = {
         console.error("Erro ao carregar status locais:", e);
       }
 
-      // Substituir status nas vagas quando existem status locais salvos
       const vagasComStatusAtualizados = response.data.map((vaga: Vaga) => {
         if (statusLocais[vaga.id]) {
           console.log(`Aplicando status local para vaga ${vaga.id}: ${statusLocais[vaga.id]}`);
@@ -113,19 +110,16 @@ export const vagaService = {
       return vagasComStatusAtualizados;
     } catch (error) {
       console.error('Erro ao listar vagas:', error);
-      // Retornar dados simulados se a API falhar
       return Object.values(mockData);
     }
   },
 
-  // Obter detalhes de uma vaga específica
   obterVaga: async (id: string): Promise<VagaCompleta> => {
     try {
       console.log(`Buscando detalhes da vaga ${id}...`);
       const response = await api.get(`/vagas/${id}`);
       console.log(`Resposta da API para vaga ${id}:`, response.data);
       
-      // Verificar se as propriedades necessárias existem
       const vagaData = response.data;
       if (!vagaData.etapas) {
         console.warn(`Vaga ${id} não possui a propriedade 'etapas'`);
@@ -134,7 +128,6 @@ export const vagaService = {
         console.warn(`Vaga ${id} não possui a propriedade 'candidatos'`);
       }
       
-      // Verificar se existe um status local salvo para esta vaga
       let statusLocal: VagaStatus | null = null;
       try {
         const statusLocais: Record<string, VagaStatus> = JSON.parse(localStorage.getItem('vaga_status_local') || '{}');
@@ -143,22 +136,19 @@ export const vagaService = {
         console.error("Erro ao carregar status local:", e);
       }
       
-      // Garantir que a estrutura está completa e aplicar status local se existir
       return {
         ...vagaData,
-        status: statusLocal || vagaData.status, // Usar status local, se disponível
+        status: statusLocal || vagaData.status,
         etapas: vagaData.etapas || [],
         candidatos: vagaData.candidatos || []
       };
     } catch (error) {
       console.error(`Erro ao obter vaga ${id}:`, error);
-      // Retornar dados simulados se a API falhar
       if (mockData[id]) {
         console.log(`Usando dados simulados para vaga ${id}`);
         return mockData[id];
       }
       
-      // Se não tiver mock para este ID específico, criar um
       const mockVaga: VagaCompleta = {
         id,
         titulo: `Vaga ${id}`,
@@ -187,7 +177,6 @@ export const vagaService = {
     }
   },
 
-  // Criar uma nova vaga
   criarVaga: async (vaga: Omit<Vaga, 'id' | 'created_at' | 'updated_at'>): Promise<Vaga> => {
     try {
       console.log('Criando nova vaga:', vaga);
@@ -195,7 +184,6 @@ export const vagaService = {
       return response.data;
     } catch (error) {
       console.error('Erro ao criar vaga:', error);
-      // Simulação de criação
       const novaVaga: Vaga = {
         id: Date.now().toString(),
         ...vaga,
@@ -206,7 +194,6 @@ export const vagaService = {
     }
   },
 
-  // Atualizar uma vaga existente
   atualizarVaga: async (id: string, vaga: Partial<Vaga>): Promise<Vaga> => {
     try {
       console.log(`Atualizando vaga ${id}:`, vaga);
@@ -218,7 +205,6 @@ export const vagaService = {
     }
   },
 
-  // Excluir uma vaga
   excluirVaga: async (id: string): Promise<void> => {
     try {
       console.log(`Excluindo vaga ${id}...`);
@@ -229,16 +215,13 @@ export const vagaService = {
     }
   },
 
-  // Alterar o status de uma vaga
   alterarStatus: async (id: string, status: VagaStatus): Promise<Vaga> => {
     try {
       console.log(`Alterando status da vaga ${id} para ${status}...`);
       
-      // Primeiro, obter a vaga atual para ter todos os campos obrigatórios
       const vagaAtual = await vagaService.obterVaga(id);
       const statusAnterior = vagaAtual.status;
       
-      // Enviar para API apenas os campos necessários, incluindo título que é obrigatório
       const vagaAtualizada = {
         titulo: vagaAtual.titulo,
         descricao: vagaAtual.descricao || '', 
@@ -248,14 +231,11 @@ export const vagaService = {
       console.log(`Atualizando vaga ${id} com:`, vagaAtualizada);
       await vagaService.atualizarVaga(id, vagaAtualizada);
       
-      // Verificar se o status foi realmente alterado na API
       const vagaDepoisDeAtualizar = await vagaService.obterVaga(id);
       
-      // Se o status não foi alterado na API, criar uma versão mockada para uso local
       if (vagaDepoisDeAtualizar.status === statusAnterior && vagaDepoisDeAtualizar.status !== status) {
         console.warn(`API não alterou o status da vaga ${id} para ${status}. Usando versão local.`);
         
-        // Armazenar status local no localStorage para persistir entre recarregamentos
         try {
           const statusLocais: Record<string, VagaStatus> = JSON.parse(localStorage.getItem('vaga_status_local') || '{}');
           statusLocais[id] = status;
@@ -264,7 +244,6 @@ export const vagaService = {
           console.error("Erro ao salvar status local:", e);
         }
         
-        // Retornar vaga com status atualizado localmente
         return {
           ...vagaDepoisDeAtualizar,
           status: status

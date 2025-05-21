@@ -1,15 +1,12 @@
-import api from './api';
 import type { LoginCredentials, RegisterCredentials, AuthResponse } from '../interfaces/auth';
 import { isTokenExpired, clearSensitiveData } from '../utils/securityUtils';
-
-// Cache para armazenar o resultado da validação de token
+import api from './api';
 interface TokenValidationCache {
   isValid: boolean;
   timestamp: number;
   token: string;
 }
 
-// Cache para 5 minutos (em milissegundos)
 const TOKEN_CACHE_TTL = 5 * 60 * 1000;
 let tokenValidationCache: TokenValidationCache | null = null;
 
@@ -23,7 +20,6 @@ export const authService = {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
-      // Atualiza o cache de validação após o login
       tokenValidationCache = {
         isValid: true,
         timestamp: Date.now(),
@@ -46,7 +42,6 @@ export const authService = {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
-      // Atualiza o cache de validação após o registro
       tokenValidationCache = {
         isValid: true,
         timestamp: Date.now(),
@@ -70,14 +65,12 @@ export const authService = {
         return false;
       }
       
-      // Verificação de expiração local (sempre executada)
       if (isTokenExpired(token)) {
         console.log('[AuthService] Token expirado (verificação local)');
         this.logout();
         return false;
       }
       
-      // Verificar o cache de validação
       if (tokenValidationCache && 
           tokenValidationCache.token === token && 
           Date.now() - tokenValidationCache.timestamp < TOKEN_CACHE_TTL) {
@@ -87,14 +80,12 @@ export const authService = {
         return tokenValidationCache.isValid;
       }
       
-      // Se chegamos aqui, precisamos validar o token com o servidor
       console.log('[AuthService] Cache expirado ou ausente, validando token no servidor...');
       
       try {
         const response = await api.get('/auth/validate');
         console.log('[AuthService] Validação de token bem-sucedida:', response.data);
         
-        // Atualiza o cache de validação
         tokenValidationCache = {
           isValid: true,
           timestamp: Date.now(),
@@ -105,7 +96,6 @@ export const authService = {
       } catch (error) {
         console.error('[AuthService] Erro ao validar token no servidor:', error);
         
-        // Atualiza o cache como inválido
         tokenValidationCache = {
           isValid: false,
           timestamp: Date.now(),
@@ -152,7 +142,6 @@ export const authService = {
 
   logout() {
     console.log('[AuthService] Realizando logout');
-    // Limpa o cache de validação
     tokenValidationCache = null;
     clearSensitiveData();
   },

@@ -3,13 +3,12 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 console.log('[API] Inicializando serviço com URL base:', API_URL);
 
-// Configuração do timeout para evitar esperas muito longas
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 5000 // 5 segundos
+  timeout: 5000
 });
 
 api.interceptors.request.use(
@@ -29,7 +28,6 @@ api.interceptors.request.use(
   }
 );
 
-// Função para verificar se a mensagem de erro indica email já existente
 const isEmailExistsError = (message: string = '') => {
   const errorMsgLower = message.toLowerCase();
   return (
@@ -48,19 +46,15 @@ const isEmailExistsError = (message: string = '') => {
   );
 };
 
-// Função auxiliar para inspecionar campos de erro profundamente
 const deepInspectErrorData = (data: any): boolean => {
-  // Log detalhado para depuração
   console.log('[API] Inspecionando dados de erro:', data);
   
   if (!data) return false;
   
-  // Caso 1: a mensagem principal contém indicação de email duplicado
   if (typeof data.message === 'string' && isEmailExistsError(data.message)) {
     return true;
   }
   
-  // Caso 2: tem um array de erros
   if (Array.isArray(data.errors)) {
     for (const err of data.errors) {
       if (typeof err.message === 'string' && isEmailExistsError(err.message)) {
@@ -75,7 +69,6 @@ const deepInspectErrorData = (data: any): boolean => {
     }
   }
   
-  // Caso 3: tem um objeto de erros com campo email
   if (data.errors && typeof data.errors === 'object') {
     if (data.errors.email && typeof data.errors.email === 'string' && isEmailExistsError(data.errors.email)) {
       return true;
@@ -85,12 +78,10 @@ const deepInspectErrorData = (data: any): boolean => {
     }
   }
   
-  // Caso 4: tem um campo error direto
   if (typeof data.error === 'string' && isEmailExistsError(data.error)) {
     return true;
   }
   
-  // Caso 5: Para APIs específicas que usam campo 'detail'
   if (typeof data.detail === 'string' && isEmailExistsError(data.detail)) {
     return true;
   }
@@ -107,7 +98,6 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Se não houver resposta, provavelmente é um erro de rede/conexão
     if (!error.response) {
       console.error('[API] Erro de rede/conexão:', {
         message: error.message,
@@ -121,7 +111,6 @@ api.interceptors.response.use(
     
     const { response } = error;
     
-    // Log completo do erro para depuração
     console.error(`[API] Erro na resposta de ${error.config?.url}:`, {
       status: response?.status,
       statusText: response?.statusText,
@@ -129,38 +118,31 @@ api.interceptors.response.use(
       completeData: JSON.stringify(response?.data)
     });
 
-    // Detectar erro de email já cadastrado - verificação melhorada
     let isEmailExists = false;
     
-    // Verificar por código HTTP específico
     if (response.status === 409) {
       isEmailExists = true;
       console.log('[API] Detectado conflito (409) - possível email já cadastrado');
     }
-    // Verificar registros com erro 400 (Bad Request) especificamente para o endpoint de registro
     else if (
       response.status === 400 && 
       error.config?.url?.includes('/auth/register')
     ) {
-      // Verificação profunda da estrutura de dados
       isEmailExists = deepInspectErrorData(response.data);
       
       if (isEmailExists) {
         console.log('[API] Detectado email já cadastrado em erro 400 BadRequest');
       }
     }
-    // Verificar pela mensagem no corpo da resposta
     else if (response?.data?.message && isEmailExistsError(response.data.message)) {
       isEmailExists = true;
       console.log('[API] Detectado email já cadastrado pela mensagem:', response.data.message);
     }
     
-    // Verificar se é uma requisição para registro e houve erro 422 (validação)
     else if (
       error.config?.url?.includes('/auth/register') && 
       response.status === 422
     ) {
-      // Verificar se alguma mensagem de erro contém indícios de email duplicado
       const errorMessage = 
         response?.data?.message || 
         (response?.data?.errors && response.data.errors[0]?.message) ||
@@ -172,7 +154,6 @@ api.interceptors.response.use(
       }
     }
     
-    // Se detectamos que é um erro de email já existente, enriquecer o erro
     if (isEmailExists) {
       return Promise.reject({
         ...error,
@@ -187,7 +168,6 @@ api.interceptors.response.use(
       });
     }
 
-    // Se o token expirou ou não tem permissão
     if (response.status === 401 || response.status === 403) {
       console.warn('[API] Erro de autenticação, removendo credenciais');
       localStorage.removeItem('token');
